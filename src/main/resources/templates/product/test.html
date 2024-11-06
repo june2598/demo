@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="">
+        <table>
+            <thead>
+            <tr>
+                <th></th><th>상품ID</th><th>상품명</th>
+            </tr>    
+            </thead>
+            <tbody>
+                <tr>
+                    <th><input type="checkbox" name="productIds" id="select"></th><th>1</th><th>상품명1</th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox" name="productIds" id="select"></th><th>1</th><th>상품명1</th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox" name="productIds" id="select"></th><th>1</th><th>상품명1</th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox" name="productIds" id="select"></th><th>1</th><th>상품명1</th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox" name="productIds" id="select"></th><th>1</th><th>상품명1</th>
+                </tr>
+            </tbody>
+        </table>
+        <div><input type="checkbox" id="selectAll"><label for="selectAll">전체선택</label><button>삭제</button><button>상품등록</button></div>
+    </form>
+    <script>
+        // const selectAllEle=document.getElementById('selectAll');
+        // const checkboxesEle= document.querySelectorAll("input[name='productIds']");
+        // selectAllEle.addEventListener('change',e=>{
+        //     // console.dir(e.target);
+        //     if(e.target.checked){
+        //         Array.from(checkboxesEle).forEach(checkbox=>checkbox.checked = true);
+        //         // console.log(checkboxesEle);
+        //     }else{
+        //         Array.from(checkboxesEle).forEach(checkbox=>checkbox.checked = false);
+
+        //     }
+        // },false);
+
+
+
+
+
+        const selectAllEle=document.getElementById('selectAll');    //전체선택
+        const selectEle = document.querySelectorAll("input[name='productIds']");  //타입체크박스인거 노드리스트에 할당 
+        selectAllEle.addEventListener('click', e => {   //이벤트 리스너
+        const Checked = selectAllEle.checked;   //Checked상수 선언 : selectAllEle의 체크상태 여부 저장 (boolean값)
+
+        selectEle.forEach(ele => {  //selectEle에 포함된 모든 체크박스 반복문 루프
+            ele.checked = Checked;// 현재반복중인 ele의 상태를 Checked의 값으로 설정
+            });
+        });
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="#{title.product.add}">상품등록</title>
+  <link rel="stylesheet" href="/css/common.css">
+  <style>
+  </style>
+</head>
+
+<body>
+<h3 th:text="#{title.product.add}">상품등록</h3>
+<!--  th:object : html의 input요소와 controller의 form객체를 연결하는 구문 -->
+<form action="" id="frm" method="post" th:object="${saveForm}">
+  <div><span class="err" id="globalErr"></span></div>
+<!--/*  <div class="err" th:errors="${saveForm}"/> */-->
+ <div th:if="${#fields.hasGlobalErrors()}">
+    <p class="err" th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>
+  </div>
+  <div>
+    <label for="pname" th:text="#{label.product.pname}">상품명</label>
+    <input type="text" name="pname" id="pname" th:value="*{pname}">
+    <span class="err" id="errPname"></span>
+    <!--/* <span class="err" th:errors="${saveForm.pname}"></span> */-->
+    <span class="err" th:each="err:${#fields.errors('pname')}" th:text="${err}"></span>
+  </div>
+  <div>
+    <label for="price" th:text="#{label.product.price}">가격</label>
+    <input type="text" name="price" id="price" th:value="*{price}">
+    <span class="err" id="errPrice"></span>
+    <span class="err" th:errors="*{price}"></span>
+  </div>
+  <div>
+    <label for="quantity" th:text="#{label.product.quantity}">수량</label>
+    <input type="text" name="quantity" id="quantity" th:value="*{quantity}">
+    <span class="err" id="errQuantity"></span>
+    <span class="err" th:errors="*{quantity}"></span>
+  </div>
+  <div>
+    <button type="submit" id="btnAdd" th:text="#{button.add}">등록</button>
+    <button type="button" id="btnFindAll" th:text="#{button.list}">목록</button>
+  </div>
+</form>
+<script type="module">
+  import { getBytesSize } from '/js/common.js';
+
+  //등록
+  btnAdd.addEventListener('click', e => {
+  //   e.preventDefault(); // submit 기본 이벤트 막기
+  //   console.log('등록!');
+  //   // 오류메시지 초기화
+  //   errPname.textContent = '';
+  //   errPrice.textContent = '';
+  //   errQuantity.textContent = '';
+
+  //   //검증
+  //   const pnameVal = pname.value.trim();
+  //   const priceVal = price.value.trim();
+  //   const quantityVal = quantity.value.trim();
+
+
+  //   //상품명
+  //   if (pnameVal.length == 0) {
+  //     pname.focus();
+  //     errPname.textContent = '상품이름은 필수 입력 항목입니다.';
+  //     return;
+  //   } else if (getBytesSize(pnameVal) > 30) {
+
+  //     pname.focus();
+  //     // errPname.textContent = '상품이름 한글1글자 3바이트, 영문1글자 1바이트 총 30바이트 길이를 초과할 수 없습니다.';
+  //     errPname.textContent = '상품이름 한글10자를 초과할 수 없습니다.';
+  //     return;
+  //   }
+  //   //가격
+  //   if (priceVal.length == 0) {
+  //     price.focus();
+  //     errPrice.textContent = '상품가격은 필수 입력 항목입니다.';
+  //     return;
+  //   } else if (isNaN(priceVal)) {        //isNaN(value) : value값이 숫자가 아니면 true
+  //     price.focus();
+  //     errPrice.textContent = '상품가격은 숫자여야 합니다.';
+  //     return;
+  //   } else if (priceVal.length > 10) {
+  //     price.focus();
+  //     errPrice.textContent = '상품가격은 10자리를 초과 할 수 없습니다.';
+  //     return;
+  //   } else if (priceVal < 1000) {
+  //     price.focus();
+  //     errPrice.textContent = '상품가격의 1000원 이상이어야 입니다.';
+  //     return;
+  //   }
+  //   //수량
+  //   if (quantityVal.length == 0) {
+  //     quantity.focus();
+  //     errQuantity.textContent = '상품수량은 필수 입력 항목입니다.';
+  //     return;
+  //   } else if (isNaN(quantityVal)) {
+  //     quantity.focus();
+  //     errPrice.textContent = '상품수량은 숫자여야 합니다.';
+  //     return;
+  //   } else if (quantityVal.length > 10) {
+  //     quantity.focus();
+  //     errQuantity.textContent = '상품수량은 10자리를 초과할 수 없습니다.';
+  //     return;
+  //   } else if (quantityVal <= 0) {
+  //     quantity.focus();
+  //     errQuantity.textContent = '상품수량은 양수이어야 합니다.';
+  //     return;
+  //   }
+
+  //   //총금액(가격 * 수량)이 1000만원을 초과할 수 없습니다.
+  //   if (priceVal * quantityVal > 10000000) {
+  //     globalErr.textContent = '총금액(가격 * 수량)이 1000만원을 초과할 수 없습니다.';
+  //     return;
+  //   }
+      frm.submit();
+  }, false);
+
+  //목록 : id는 unique 하기때문에 getelementId 하지않고 바로 접근이 가능하다.
+  btnFindAll.addEventListener('click', e => {
+    location.href = '/products';
+  }, false);
+
+</script>
+</body>
+
+</html>
