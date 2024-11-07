@@ -11,7 +11,7 @@
    * client-server간 http api 비동기 통신
    *-----------------------------------------------------------------------*/
   const ajax = {
-    get: async url => {
+    get: async url => {                 //function(url) {}
       const option = {
         method: 'GET',
         headers: {
@@ -24,7 +24,7 @@
         throw new Error(`응답오류 : ${res.status}`);
         }
         const json = await res.json();
-        return json;
+        return json;                //반환값 : js 객체
       } catch (err) {
         console.error(err.message);
       }
@@ -108,5 +108,5 @@
           }
     },
   };
-  
+
     export { getBytesSize, ajax };

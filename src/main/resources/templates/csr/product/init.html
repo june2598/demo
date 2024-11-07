@@ -1,141 +1,332 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>상품관리-CSR</title>
+  <style>
+    .field-error {color:red; font-weight:bold; font-size:0.8rem;}
+
+    .fieldError { border:1px solid red; }
+    .fieldSuccess { border:1px solid green; }
+  </style>
   <script type="module">
+    import { ajax } from '/js/common.js';
 
-    // 상품목록 가져오기
-    async function getProducts(){
-      const url = `/api/products`;
-
+    //상품등록
+    const addProduct = async product => {         //매개값으로 상품을 받음
       try {
-        const res = await fetch(url,{
-          method:'GET',
-          headers: {
-            'Content-Type':'application/json',
-            'Accept':'application/json'
-          },
-        });  
-
-        if(!res.ok){
-          throw new Error(`응답오류:${res.status}`);
+        const url = '/api/products';
+        const result = await ajax.post(url, product);     
+        if (result.header.rtcd === '00') {
+          console.log(result.body);
+          frm.reset();
+          getProducts();      //갱신된 목록을 가져와서 보여주는 부분
+        } else {
+          console.log(result.header.rtmsg);
         }
-        
-        const json = await res.json(); // json포맷 문자열 => js객체
-        console.log(json);
-        if(json.header.rtcd == '00'){
-          displayProductList(json.body);
-        }else if(json.header.rtcd == '01'){
-          console.log('가져올 목록이 없음!')
-        }else{
-          console.log('기타');
-        }
-      }catch(err){
+      } catch (err) {
         console.error(err.message);
-      }      
-    }
-
-    // 상품목록 화면
-    function displayProductList(products){
-      const $list = document.createElement('div');
-      document.body.appendChild($list);
-
-      const makeTr = products => {
-        const $tr = products.map(product=>`<tr><td>${product.productId}</td><td>${product.pname}</td></tr>`)
-                            .join('');  //배열요소 합치기
-        return $tr;                            
       }
+    };
 
-      $list.innerHTML = `
-        <table>
-          <caption>상품목록</caption>
-          <thead>
-            <tr><th>상품번호</th><th>상품명</th></tr>
-          </thead>
-          <tbody>
-            ${makeTr(products)} 
-          </tbody>
-        </table>
-      `;
-    }
+    //상품조회
+    const getProduct = async pid => {
+      try {
+        const url = `/api/products/${pid}`;    
+        const result = await ajax.get(url);
+        console.log(result);
+        if (result.header.rtcd === '00') {
+          console.log(result.body);
+          // productId2.value = result.body.pname 과의 차이 : 보이는값으로 접근 , 초기값에 접근
 
+          //초기값으로 한번 세팅해주는 부분이 굳이 필요한가?
+          productId2.setAttribute('value', result.body.productId);
+          pname2.setAttribute('value', result.body.pname);
+          quantity2.setAttribute('value', result.body.quantity);
+          price2.setAttribute('value', result.body.price);
+          
+          //어차피 새로 할당한다?
+          productId2.value = result.body.productId;
+          pname2.value = result.body.pname;
+          quantity2.value =  result.body.quantity;
+          price2.value = result.body.price;
 
-    // 상품 등록 화면
-    function displayForm(){
+        } else {
+          console.log(result.header.rtmsg);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    //상품삭제
+    const delProduct = async (pid, frm) => {
+      try {
+        const url = `/api/products/${pid}`;
+        const result = await ajax.delete(url);
+        console.log(result);
+        if (result.header.rtcd === '00') {
+          console.log(result.body);
+          const $inputs = frm.querySelectorAll('input');
+          [...$inputs].forEach(ele => (ele.value = '')); //폼필드 초기화
+          getProducts();
+        } else {
+          console.log(result.header.rtmsg);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    //상품수정
+    const modifyProduct = async (pid, product) => {
+      try {
+        const url = `/api/products/${pid}`;
+        const result = await ajax.patch(url, product);
+        if (result.header.rtcd === '00') {
+          console.log(result.body);
+          getProducts();
+        } else {
+          console.log(result.header.rtmsg);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+
+    //상품목록
+    const getProducts = async () => {
+      try {
+        const url = `/api/products`;
+        const result = await ajax.get(url);
+        console.log(result);
+        if (result.header.rtcd === '00') {
+          displayProductList(result.body);
+        } else {
+          console.log(result.header.rtmsg);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    // //목록버튼
+    // const $listBtn = document.createElement('button'); // <button></button>
+    // $listBtn.textContent = '목록가져오기'; //<button>목록가져오기</button>
+    // $listBtn.setAttribute('id', 'btnList'); //<button id='btnList'>목록가져오기</button>
+    // document.body.appendChild($listBtn);
+    // btnList.addEventListener('click', getProducts);
+
+    const $list = document.createElement('div');
+    document.body.appendChild($list);
+
+    //상품 등록화면
+    function displayForm() {
       //상품등록
-      const $addFormWrap = document.createElement('div'); //식별자 앞에 $ 표시 : Ele를 의미
+      const $addFormWrap = document.createElement('div');
       $addFormWrap.innerHTML = `
         <form id="frm">
           <div>
-            <label for="pname">상품명</label>
-            <input type="text" name="pname" id="pname">
+              <label for="pname">상품명</label>
+              <input type="text" id="pname" name="pname"/>
+              <span class="field-error client" id="errPname"></span>
           </div>
           <div>
-            <label for="price">가격</label>
-            <input type="text" name="price" id="price">
+              <label for="quantity">수량</label>
+              <input type="text" id="quantity" name="quantity"/>
+              <span class="field-error client" id="errQuantity"></span>
           </div>
           <div>
-            <label for="quantity">수량</label>
-            <input type="text" name="quantity" id="quantity">
+              <label for="price">가격</label>
+              <input type="text" id="price" name="price"/>
+              <span class="field-error client" id="errPrice"></span>
           </div>
-          <div><button id="btnAdd">등록</button></div>
+          <div>
+              <button id="btnAdd" type="submit">등록</button>
+          </div>
         </form>
       `;
-      
-      document.body.insertAdjacentElement('afterbegin',$addFormWrap); ////Syntax : insertAdjacentElement(position, element)
+      document.body.insertAdjacentElement('afterbegin', $addFormWrap);
       const $frm = $addFormWrap.querySelector('#frm');
-      $frm.addEventListener('submit',e=>{
-        e.preventDefault();  //submit 기본이벤트를 일단 막기(유효성체크 먼저해야됨)
-        //1)유효성 체크
+      $frm.addEventListener('submit', e => {
+        e.preventDefault(); // 기본동작 중지
 
-        //2)
-        const product = {
-          "pname" : $addFormWrap.querySelector('#pname').value,
-          "price" : $addFormWrap.querySelector('#price').value,
-          "quantity" : $addFormWrap.querySelector('#quantity').value
+        //유효성 체크
+        if($frm.pname.value.trim().length === 0) {
+          errPname.textContent = '상품명은 필수 입니다';
+          $frm.pname.focus();
+          return;
         }
-        console.log(product);
+        if($frm.quantity.value.trim().length === 0) {
+          errQuantity.textContent = '수량 필수 입니다';
+          $frm.quantity.focus();
+          return;
+        }
+        if($frm.price.value.trim().length === 0) {
+          errPrice.textContent = '가격은 필수 입니다';
+          $frm.price.focus();
+          return;
+        }
+
+        const formData = new FormData(e.target); //폼데이터가져오기
+        const product = {};
+        [...formData.keys()].forEach(
+          ele => (product[ele] = formData.get(ele)),
+        ); // {pname:'책상', quantitiy:10, price:100 }
 
         addProduct(product);
-      },false);
-    }  
-    // 상품 등록 처리
-    async function addProduct(product){
-      
-      const url = `/api/products`;
 
-      try {
-        const res = await fetch(url,{
-          method:'POST',
-          headers: {'Content-Type':'application/json'},
-          body:JSON.parse(product)  // js 객체 => json포맷 문자열
-        });  
+      });
+    }
 
-        if(!res.ok){
-          throw new Error(`응답오류:${res.status}`);
-        }
-        
-        const json = await res.json(); // json포맷 문자열 => js객체
-        console.log(json);
-        if(json.header.rtcd == '00'){
-          cosole.log('상품생성 성공!');
-        }else{
-          cosole.log('상품생성 실패!');
-        }
-      }catch(err){
-        console.error(err.message);
-      }
+    //상품조회 화면
+    function displayReadForm() {
+      //상태 : 조회 mode-read, 편집 mode-edit
+      const changeEditMode = frm => {
+        frm.classList.toggle('mode-edit', true);
+        [...frm.querySelectorAll('input')]
+          .filter(input => input.name !== 'productId')
+          .forEach(input => input.removeAttribute('readonly'));
+
+        const $btns = frm.querySelector('.btns');
+        $btns.innerHTML = `
+          <button id="btnSave" type="button">저장</button>
+          <button id="btnCancel" type="button">취소</button>
+        `;
+
+        const $btnSave = $btns.querySelector('#btnSave');
+        const $btnCancel = $btns.querySelector('#btnCancel');
+
+        //저장
+        $btnSave.addEventListener('click', e => {
+          const formData = new FormData(frm); //폼데이터가져오기
+          const product = {};
+
+          [...formData.keys()].forEach(
+            ele => (product[ele] = formData.get(ele)),
+          ); // {pname:'책상', quantitiy:10, price:100 }
+
+          modifyProduct(product.productId, product); //수정
+          getProduct(product.productId); //조회
+          changeReadMode(frm); //읽기모드
+        });
+
+        //취소
+        $btnCancel.addEventListener('click', e => {
+          frm.reset(); //초기화
+          changeReadMode(frm);
+        });
+      };
+
+      const changeReadMode = frm => {
+        frm.classList.toggle('mode-read', true);    //굳이 toggle을 써야하는가? add를 쓰는건 안되나?
+        [...frm.querySelectorAll('input')]
+          .filter(input => input.name !== 'productId')
+          .forEach(input => input.setAttribute('readonly', ''));
+
+        const $btns = frm.querySelector('.btns');
+        $btns.innerHTML = `
+          <button id="btnEdit" type="button">수정</button>
+          <button id="btnDelete" type="button">삭제</button>
+        `;
+
+        const $btnDelete = $btns.querySelector('#btnDelete');
+        const $btnEdit = $btns.querySelector('#btnEdit');
+
+        //수정
+        $btnEdit.addEventListener('click', e => {
+          changeEditMode(frm);
+        });
+
+        //삭제
+        $btnDelete.addEventListener('click', e => {
+          const pid = frm.productId.value;
+          if (!pid) {
+            alert('상품조회 후 삭제바랍니다.');
+            return;
+          }
+
+          if (!confirm('삭제하시겠습니까?')) return;
+          delProduct(pid, frm);
+        });
+      };
+
+      const $readFormWrap = document.createElement('div');
+      $readFormWrap.innerHTML = `
+        <form id="frm2">
+
+          <div>
+              <label for="productId2">상품아이디</label>
+              <input type="text" id="productId2" name="productId" readonly/>
+          </div>
+          <div>
+              <label for="pname">상품명</label>
+              <input type="text" id="pname2" name="pname"/>
+          </div>
+          <div>
+              <label for="quantity">수량</label>
+              <input type="text" id="quantity2" name="quantity"/>
+          </div>
+          </div>
+          <div>
+              <label for="price">가격</label>
+              <input type="text" id="price2" name="price"/>
+          </div>
+          </div>
+          <div class='btns'></div>
+
+        </form>
+      `;
+      document.body.insertAdjacentElement('afterbegin', $readFormWrap);
+      const $frm2 = $readFormWrap.querySelector('#frm2');
+      changeReadMode($frm2);
+    }
+
+    //상품목록 화면
+    function displayProductList(products) {
+
+      const makeTr = products => {
+        const $tr = products
+          .map(
+            product =>
+              `<tr data-pid=${product.productId}>
+                <td>${product.productId}</td>
+                <td>${product.pname}</td></tr>`,
+          )
+          .join('');
+        return $tr;
+      };
+
+      $list.innerHTML = `
+        <table>
+          <caption> 상 품 목 록 </caption>
+          <thead>
+            <tr>
+              <th>상품번호</th>
+              <th>상품명</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${makeTr(products)}
+          </tbody>
+        </table>`;
+
+      const $products = $list.querySelectorAll('table tbody tr');   // 테이블의 tbody 내 모든 tr 요소(각 상품 행)를 선택. 이 메서드는 NodeList를 반환하며, 각 행에 대한 참조를 포함
+
+      [...$products].forEach(product =>         //NodeList는 배열이 아니기 때문에, 전개 연산자(...)를 사용하여 이를 배열로 변환, forEach를 사용가능케함. = Array.from($products)
+        product.addEventListener('click', e => {
+          const pid = e.currentTarget.dataset.pid;    //dataset 속성은 HTML 요소에 정의된 data-* 속성에 접근할 수 있게 해줍니다. 예를 들어, <tr data-pid="123">와 같은 형태로 데이터를 설정한 경우, dataset.pid를 통해 123 값을 가져올 수 있습니다.
+          getProduct(pid);                            //이 코드는 클릭된 상품의 고유 식별자(pid)를 가져옵니다.
+        }),
+      );
     }
   
-  
-    getProducts();
+    displayReadForm();      //화면 렌더링
+    displayForm();          //화면 렌더링
+    getProducts();          //화면 렌더링
   </script>
 </head>
-<body>
-
-
-</body>
+<body></body>
 </html>
