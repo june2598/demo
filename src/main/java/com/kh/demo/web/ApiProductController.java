@@ -3,7 +3,9 @@ package com.kh.demo.web;
 import com.kh.demo.domain.entity.Product;
 import com.kh.demo.domain.product.svc.ProductSVC;
 import com.kh.demo.web.api.ApiResponse;
+import com.kh.demo.web.req.product.ReqDels;
 import com.kh.demo.web.req.product.ReqSave;
+import com.kh.demo.web.req.product.ReqUpdate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -27,11 +29,12 @@ public class ApiProductController {
   public ApiResponse<Product> findById(@PathVariable("pid") Long pid){
     ApiResponse<Product> res = null;
     Optional<Product> optionalProduct = productSVC.findById(pid);
+
     if(optionalProduct.isPresent()){
       Product product = optionalProduct.get();
       res = ApiResponse.createApiResponse("00","success",product);    //객체생성 못하고(private기때문) 정적메소드로
     }else{
-     res = ApiResponse.createApiResponse("01","not found",null);   //못찾았을시
+      res = ApiResponse.createApiResponse("01","not found",null);   //못찾았을시
     }
     return res;
   }
@@ -62,11 +65,65 @@ public class ApiProductController {
 
     Optional<Product> optionalProduct = productSVC.findById(pid);
     if(optionalProduct.isPresent()){
-    Product savedProduct = optionalProduct.get();
-    res = ApiResponse.createApiResponse("00","success", savedProduct);
+      Product savedProduct = optionalProduct.get();
+      res = ApiResponse.createApiResponse("00","success", savedProduct);
     }else{
       res = ApiResponse.createApiResponse("01","fail",null);
     }
+    return res;
+  }
+
+  //삭제
+
+  @DeleteMapping("/{pid}")  // delete http://localhost:9080/api/products/{pid}
+  public ApiResponse delete(@PathVariable("pid") Long pid){
+    ApiResponse res = null;
+
+    int rows = productSVC.deleteById(pid);
+    if(rows == 1){
+      res = ApiResponse.createApiResponse("00","success",null);
+    }else{
+      res = ApiResponse.createApiResponse("01","not found",null);
+    }
+
+    return res;
+  }
+
+
+  //상품수정
+
+  @PatchMapping("/{pid}")
+  public ApiResponse update(@PathVariable("pid") Long pid, @RequestBody ReqUpdate reqUpdate){
+    log.info("reqUpdate={}", "reqUpdate={}", pid, reqUpdate);
+    ApiResponse res = null;
+
+    Product product = new Product();
+    BeanUtils.copyProperties(reqUpdate,product);
+    int rows = productSVC.updateById(pid,product);
+
+    if(rows == 1){
+      Product updatedProduct = productSVC.findById(pid).get();
+      res = ApiResponse.createApiResponse("00","success",updatedProduct);
+    }else{
+      res = ApiResponse.createApiResponse("01","not found",null);
+    }
+
+    return res;
+  }
+
+  //여러건 삭제
+  @DeleteMapping
+  public ApiResponse<String> deleteByIds(@RequestBody ReqDels reqDels){
+    log.info("reqDels={}",reqDels);
+    ApiResponse<String> res = null;
+
+    int rows = productSVC.deleteByIds(reqDels.getProductIds()); //삭제 건수
+    if(rows > 0){
+      res = ApiResponse.createApiResponse("00","success","삭제건수 : " + rows);
+    }else{
+      res = ApiResponse.createApiResponse("01","not found",null);
+    }
+
     return res;
   }
 }
