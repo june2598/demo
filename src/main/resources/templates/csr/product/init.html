@@ -19,7 +19,7 @@
       try {
         const url = '/api/products';
         const result = await ajax.post(url, product);     
-        if (result.header.rtcd === '00') {
+        if (result.header.rtcd === 'S00') {
           console.log(result.body);
           frm.reset();
           getProducts();      //갱신된 목록을 가져와서 보여주는 부분
@@ -37,7 +37,7 @@
         const url = `/api/products/${pid}`;    
         const result = await ajax.get(url);
         console.log(result);
-        if (result.header.rtcd === '00') {
+        if (result.header.rtcd === 'S00') {
           console.log(result.body);
           // productId2.value = result.body.pname 과의 차이 : 보이는값으로 접근 , 초기값에 접근
 
@@ -67,7 +67,7 @@
         const url = `/api/products/${pid}`;
         const result = await ajax.delete(url);
         console.log(result);
-        if (result.header.rtcd === '00') {
+        if (result.header.rtcd === 'S00') {
           console.log(result.body);
           const $inputs = frm.querySelectorAll('input');
           [...$inputs].forEach(ele => (ele.value = '')); //폼필드 초기화
@@ -85,7 +85,7 @@
       try {
         const url = `/api/products/${pid}`;
         const result = await ajax.patch(url, product);
-        if (result.header.rtcd === '00') {
+        if (result.header.rtcd === 'S00') {
           console.log(result.body);
           getProducts();
         } else {
@@ -102,7 +102,7 @@
         const url = `/api/products`;
         const result = await ajax.get(url);
         console.log(result);
-        if (result.header.rtcd === '00') {
+        if (result.header.rtcd === 'S00') {
           displayProductList(result.body);
         } else {
           console.log(result.header.rtmsg);
