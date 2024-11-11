@@ -1,5 +1,7 @@
 package com.kh.demo.web.api;
 
+import java.util.Arrays;
+
 public enum ApiResponseCode {
   // 성공 응답
   SUCCESS("S00", "Success"),
@@ -32,4 +34,23 @@ public enum ApiResponseCode {
   public String getRtmsg() {
     return rtmsg;
   }
+
+  // 코드로 enum 조회
+  public static ApiResponseCode of(String code) {
+    // stream : js의 고차함수와 유사?
+    return Arrays.stream(values())
+        //상수객체를  하나씩 가져와서, 매개값 (code)와 같은것만 필터링
+        .filter(rc -> rc.getRtcd().equals(code))
+        //걸러진 배열중에 첫번째를 가져옴
+        .findFirst()
+        .orElse(INTERNAL_SERVER_ERROR); //없으면 내부오류 처리
+  }
+
+  //응답 생성 헬퍼 메소드
+  public <T> ApiResponse<T> toResponse(T data){
+    return ApiResponse.createApiResponse(this, data );
+  }
+
+  //상세
+
 }

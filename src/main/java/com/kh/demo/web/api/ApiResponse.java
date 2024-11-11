@@ -27,10 +27,12 @@ public class ApiResponse<T> {       //generic type : <T> - 객체를 생성할�
   private static class Header{
     private String rtcd;      //응답코드
     private String rtmsg;     //응답메시지
+//    private Map<String, String> details; //응답오류 상세
 
     Header(String rtcd, String rtmsg) {
       this.rtcd = rtcd;
       this.rtmsg = rtmsg;
+//      this.details = details;
     }
   }
 

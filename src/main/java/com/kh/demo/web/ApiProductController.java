@@ -34,9 +34,9 @@ public class ApiProductController {
 
     if(optionalProduct.isPresent()){
       Product product = optionalProduct.get();
-      res = ApiResponse.createApiResponse(ApiResponseCode.SUCCESS,product);    //객체생성 못하고(private기때문) 정적메소드로
+      res = ApiResponseCode.SUCCESS.toResponse(product);    //객체생성 못하고(private기때문) 정적메소드로
     }else{
-      res = ApiResponse.createApiResponse(ApiResponseCode.ENTITY_NOT_FOUND,null);   //못찾았을시
+      res = ApiResponseCode.ENTITY_NOT_FOUND.toResponse(null);   //못찾았을시
     }
     return res;
   }
@@ -48,9 +48,9 @@ public class ApiProductController {
     ApiResponse<List<Product>> res = null;
     List<Product> products = productSVC.findAll();
     if(products.size() != 0) {
-      res = ApiResponse.createApiResponse(ApiResponseCode.SUCCESS, products);
+      res = ApiResponseCode.SUCCESS.toResponse(products);
     }else{
-      res = ApiResponse.createApiResponse(ApiResponseCode.ENTITY_NOT_FOUND, null);
+      res = ApiResponseCode.ENTITY_NOT_FOUND.toResponse(null);
     }
     return res;
   }
@@ -68,9 +68,9 @@ public class ApiProductController {
     Optional<Product> optionalProduct = productSVC.findById(pid);
     if(optionalProduct.isPresent()){
       Product savedProduct = optionalProduct.get();
-      res = ApiResponse.createApiResponse(ApiResponseCode.SUCCESS, savedProduct);
+      res = ApiResponseCode.SUCCESS.toResponse(savedProduct);
     }else{
-      res = ApiResponse.createApiResponse(ApiResponseCode.INTERNAL_SERVER_ERROR,null);
+      res = ApiResponseCode.INTERNAL_SERVER_ERROR.toResponse(null);
     }
     return res;
   }
@@ -83,9 +83,10 @@ public class ApiProductController {
 
     int rows = productSVC.deleteById(pid);
     if(rows == 1){
-      res = ApiResponse.createApiResponse(ApiResponseCode.SUCCESS,null);
+      res = ApiResponseCode.SUCCESS.toResponse(null);
+
     }else{
-      res = ApiResponse.createApiResponse(ApiResponseCode.ENTITY_NOT_FOUND,null);
+      res = ApiResponseCode.ENTITY_NOT_FOUND.toResponse(null);
     }
 
     return res;
@@ -105,9 +106,9 @@ public class ApiProductController {
 
     if(rows == 1){
       Product updatedProduct = productSVC.findById(pid).get();
-      res = ApiResponse.createApiResponse(ApiResponseCode.SUCCESS,updatedProduct);
+      res = ApiResponseCode.SUCCESS.toResponse(updatedProduct);
     }else{
-      res = ApiResponse.createApiResponse(ApiResponseCode.ENTITY_NOT_FOUND,null);
+      res = ApiResponseCode.ENTITY_NOT_FOUND.toResponse(null);
     }
 
     return res;
@@ -121,9 +122,9 @@ public class ApiProductController {
 
     int rows = productSVC.deleteByIds(reqDels.getProductIds()); //삭제 건수
     if(rows > 0){
-      res = ApiResponse.createApiResponse(ApiResponseCode.SUCCESS,"삭제건수 : " + rows);
+      res = ApiResponseCode.SUCCESS.toResponse("삭제건수 : " + rows);
     }else{
-      res = ApiResponse.createApiResponse(ApiResponseCode.ENTITY_NOT_FOUND,null);
+      res = ApiResponseCode.ENTITY_NOT_FOUND.toResponse(null);
     }
 
     return res;

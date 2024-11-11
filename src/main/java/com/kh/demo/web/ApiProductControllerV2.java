@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Slf4j
 //@Controller
-@RestController // @Controller + @ResponseBody
+//@RestController // @Controller + @ResponseBody
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ApiProductControllerV2 {
