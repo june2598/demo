@@ -46,3 +46,5 @@ public class ProductSVCImpl implements ProductSVC{
     return productDAO.deleteByIds(productIds);
   }
 }
+
+

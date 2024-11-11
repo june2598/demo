@@ -34,7 +34,7 @@ public class ApiResponse<T> {       //generic type : <T> - 객체를 생성할�
     }
   }
 
-  public static <T> ApiResponse<T> createApiResponse(String rtcd, String rtmsg, T body){
+  public static <T> ApiResponse<T> createApiResponse(ApiResponseCode responseCode, T body){
     int totalCnt = 0;
 
     if(body != null) {
@@ -48,6 +48,6 @@ public class ApiResponse<T> {       //generic type : <T> - 객체를 생성할�
         totalCnt = 1;
       }
     }
-    return new ApiResponse<>(new Header(rtcd,rtmsg), body, totalCnt);
+    return new ApiResponse<>(new Header(responseCode.getRtcd(), responseCode.getRtmsg()), body, totalCnt);
   }
 }
