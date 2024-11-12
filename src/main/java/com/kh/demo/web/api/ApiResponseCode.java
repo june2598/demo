@@ -22,7 +22,7 @@ public enum ApiResponseCode {
   private final String rtcd;
   private final String rtmsg;
 
-  ApiResponseCode(String rtcd, String rtmsg) {
+  ApiResponseCode(String rtcd, String rtmsg) {      //내부적으로만 생성되는 생성자함수 (사실상 private?)
     this.rtcd = rtcd;
     this.rtmsg = rtmsg;
   }
@@ -37,20 +37,10 @@ public enum ApiResponseCode {
 
   // 코드로 enum 조회
   public static ApiResponseCode of(String code) {
-    // stream : js의 고차함수와 유사?
     return Arrays.stream(values())
-        //상수객체를  하나씩 가져와서, 매개값 (code)와 같은것만 필터링
         .filter(rc -> rc.getRtcd().equals(code))
-        //걸러진 배열중에 첫번째를 가져옴
         .findFirst()
-        .orElse(INTERNAL_SERVER_ERROR); //없으면 내부오류 처리
+        .orElse(INTERNAL_SERVER_ERROR);
   }
-
-  //응답 생성 헬퍼 메소드
-  public <T> ApiResponse<T> toResponse(T data){
-    return ApiResponse.createApiResponse(this, data );
-  }
-
-  //상세
 
 }
