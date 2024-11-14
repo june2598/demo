@@ -34,10 +34,10 @@ public class GlobalExceptionHandler {
 //  }
 //
   // 일반 예외 - details 없음
-  @ExceptionHandler(Exception.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ApiResponse<Object> handleException(Exception e) {
-    log.error("Unexpected error occurred", e);
-    return ApiResponse.of(ApiResponseCode.INTERNAL_SERVER_ERROR, null);
-  }
+//  @ExceptionHandler(Exception.class)
+//  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//  public ApiResponse<Object> handleException(Exception e) {
+//    log.error("Unexpected error occurred", e);
+//    return ApiResponse.of(ApiResponseCode.INTERNAL_SERVER_ERROR, null);
+//  }
 }

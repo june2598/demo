@@ -9,11 +9,6 @@
     /* * {
       outline: 1px solid red;
     } */
-     .field-err{
-      font-size: 0.7rem;
-      font-weight: bold;
-      color: red;
-     }
   </style>
 </head>
 
@@ -24,9 +19,6 @@
       <div class="form-group">
         <label for="email">이메일</label>
         <input type="text" th:field="*{email}">
-        <div class="field-err" th:each="err : ${#fields.errors('email')}">
-          <span th:text="${err}"></span>
-        </div>
       </div>
       <div class="form-group">
         <label for="passwd">비밀번호</label>
@@ -34,7 +26,7 @@
       </div>
       <div class="form-group">
         <label for="pwdchk">비밀번호확인</label>
-        <input type="password" name="passwdChk" id="">
+        <input type="password" name="passwdchk" id="passwdchk">
       </div>
       <div class="form-group">
         <label for="tel">전화번호</label>
@@ -64,20 +56,25 @@
           <label for="hobby">취미</label>
         </div>
         <div>
-          <th:block th:each="ele : ${codes}">
-            <input type="checkbox" th:value="${ele.codeId}" th:field="*{hobby}">
-            <label for="" th:text="${ele.decode}"></label>
-          </th:block>
-        </div>
+          <input type="checkbox" value="독서" th:field="*{hobby}">
+          <!-- contains : 특정문자열 포함하는지 여부-->
+          <label for="reading">독서</label>
+          <input type="checkbox" value="음악감상" th:field="*{hobby}">
+          <label for="music">음악감상</label>
+          <input type="checkbox" value="운동" th:field="*{hobby}">
+          <label for="exercise">운동</label>
+          <input type="checkbox" value="게임" th:field="*{hobby}">
+          <label for="game">게임</label>
+        </div>        
       </div>
       <div class="form-group-region">
         <label for="">지역</label>
         <select th:field="*{region}">
           <option value="" selected>== 선택 ==</option>
-          <th:block th:each="ele : ${regions}">
-            <option th:value="${ele.codeId}" th:text="${ele.decode}">서울</option>
-          </th:block>
-
+          <option value="A0201">서울</option>
+          <option value="A0202">부산</option>
+          <option value="A0203">대구</option>
+          <option value="A0204">울산</option>
         </select>
       </div>
       <div class="button">

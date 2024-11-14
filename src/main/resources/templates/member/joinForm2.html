@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <style>
+    /* * {
+      outline: 1px solid red;
+    } */
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h3 class="title">회원가입</h3>
+    <form class="join_form" method="post" action="">
+      <div class="form-group">
+        <label for="email">이메일</label>
+        <input type="text" name="email" id="email" th:value="${joinForm.email}">
+      </div>
+      <div class="form-group">
+        <label for="passwd">비밀번호</label>
+        <input type="password" name="passwd" id="passwd" th:value="${joinForm.passwd}">
+      </div>
+      <div class="form-group">
+        <label for="pwdchk">비밀번호확인</label>
+        <input type="password" name="passwdchk" id="passwdchk">
+      </div>
+      <div class="form-group">
+        <label for="tel">전화번호</label>
+        <input type="tel" name="tel" id="tel" th:value="${joinForm.tel}">
+      </div>
+      <div class="form-group">
+        <label for="nickname">별칭</label>
+        <input type="text" name="nickname" id="nickname" th:value="${joinForm.nickname}">
+      </div>
+      <div class="form-group-gender">
+        <div>
+          <span>성별</span>
+        </div>
+        <div>
+          <!-- joinForm.gender 값이 없으면 value='남자'
+               joinForm.gender 값이 '남자' value='남자' checked-->
+          <!-- joinForm.gender 값이 없으면 value='여자'
+               joinForm.gender 값이 '여자' value='여자' checked-->
+          <input type="radio" name="gender" id="gender_1" value="남자" th:checked="${joinForm.gender == '남자'}">
+          <label for="male">남자</label>
+          <input type="radio" name="gender" id="gender_2" value="여자" th:checked="${joinForm.gender == '여자'}">
+          <label for="female">여자</label>
+        </div>
+      </div>
+      <div class="form-group-hobby">
+        <div>
+          <label for="hobby">취미</label>
+        </div>
+        <div>
+          <input type="checkbox" name="hobby" id="hobby_1" value="독서" th:checked="${joinForm.hobby?.contains('독서')}">    <!-- contains : 특정문자열 포함하는지 여부-->
+          <label for="reading">독서</label>
+          <input type="checkbox" name="hobby" id="hobby_2" value="음악감상" th:checked="${joinForm.hobby?.contains('음악감상')}">
+          <label for="music">음악감상</label>
+          <input type="checkbox" name="hobby" id="hobby_3" value="운동" th:checked="${joinForm.hobby?.contains('운동')}">
+          <label for="exercise">운동</label>
+          <input type="checkbox" name="hobby" id="hobby_4" value="게임" th:checked="${joinForm.hobby?.contains('게임')}">
+          <label for="game">게임</label>
+        </div>
+      </div>
+  </div>
+  <div class="form-group-region">
+    <label for="region">지역</label>
+    <select name="region" id="region">
+      <option value="" selected>== 선택 ==</option>
+      <option value="A0201" th:selected="${joinForm.region == 'A0201'}">서울</option>
+      <option value="A0202" th:selected="${joinForm.region == 'A0202'}">부산</option>
+      <option value="A0203" th:selected="${joinForm.region == 'A0203'}">대구</option>
+      <option value="A0204" th:selected="${joinForm.region == 'A0204'}">울산</option>
+    </select>
+  </div>
+  <div class="button">
+    <button type="submit">가입</button><button>취소</button>
+  </div>
+  </div>
+  </form>
+  <script>
+  </script>
+</body>
+
+</html>
