@@ -55,7 +55,7 @@ public class ProductController {
     //2.1 필드 오류 : 상품 상품수량 1000 초과 불가
 
     if(saveForm.getQuantity() > 1000) {
-      bindingResult.rejectValue("quantity","product",new Object[]{100},null);  //product.saveForm.quantity,product.quantity, product
+      bindingResult.rejectValue("quantity","product",new Object[]{1000},null);  //product.saveForm.quantity,product.quantity, product
     }
 
     //2.2 글로벌 오류 : 총액(상품수량 * 단가) 1000만원 초과 불가

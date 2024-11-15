@@ -7,8 +7,17 @@
   <title>초기화면(tymeleaf)</title>
 </head>
 <body>
-<ul>
+  <h3 th:if="${!session.isEmpty()}">
+<p><span th:text="${session.loginOkMember.nickname}"></span><span>님 반갑습니다.</span></p>
+  </h3>
+<ul th:if="${session.isEmpty()}">      <!--th:if 조건에 맞으면 렌더링을함-->
+  <li><a href="/login">로그인</a></li>
   <li><a href="/members/join">회원가입-SSR</a></li>
+  <li><a href="/products">상품관리-SSR</a></li>
+  <li><a href="/csr/products">상품관리-CSR</a></li>
+</ul>
+
+<ul th:if="${!session.isEmpty()}">
   <li><a href="/products">상품관리-SSR</a></li>
   <li><a href="/csr/products">상품관리-CSR</a></li>
 </ul>
