@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -32,8 +33,11 @@ public class LoginController {
   }
 
   //로그인처리
-  @PostMapping("/login")
-  public String login(@Valid LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request) {
+  @PostMapping("/login")          //http://localhost:9080/login?redirect=/products
+  public String login(@Valid LoginForm loginForm,
+                      BindingResult bindingResult,
+                      @RequestParam(name = "redirectUrl", defaultValue = "/") String redirectUrl,   //redirectUrl이 없으면 "/"
+                      HttpServletRequest request) {
     log.info("loginForm={}", loginForm);
 
 
@@ -46,10 +50,10 @@ public class LoginController {
 
     //2) 비밀번호 일치여부 체크
     Optional<Member> optionalMember = memberDAO.findByEmail(loginForm.getEmail());
-    Member loginMember = optionalMember.get();
-    log.info("loginMember={}", loginMember);
+    Member member = optionalMember.get();
+    log.info("loginMember={}", member);
 
-    if (!loginForm.getPasswd().equals(loginMember.getPasswd())) {
+    if (!loginForm.getPasswd().equals(member.getPasswd())) {
       bindingResult.rejectValue("passwd", "invalidMember");
       return "/login/loginForm";
     }
@@ -59,24 +63,25 @@ public class LoginController {
     HttpSession session = request.getSession(true);//true : 없으면 생성
 
     //4) 세션에 회원정보 저장
-    LoginMember loginOkMember = new LoginMember(
-        loginMember.getMemberId(),
-        loginMember.getEmail(),
-        loginMember.getNickname(),
-        loginMember.getGubun());
-    session.setAttribute("loginOkMember", loginOkMember);
+    LoginMember loginMember = new LoginMember(
+        member.getMemberId(),
+        member.getEmail(),
+        member.getNickname(),
+        member.getGubun());
+    session.setAttribute("loginMember", loginMember);
 
-    return "redirect:/";
+    return "redirect:"+redirectUrl;   //로그인 전 요청 URL로 이동
   }
 
   //로그아웃처리
   @GetMapping("/logout")
-  public String logout(HttpServletRequest request){
+  public String logout(HttpServletRequest request) {
     //세션 정보 가져오기
     HttpSession session = request.getSession(false);
     //세션제거
-    session.invalidate();
+    if (session != null) {
+      session.invalidate();
+    }
     return "redirect:/";
   }
-
 }

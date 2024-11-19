@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      th:data-member-id="${session.loginMember?.memberId}"
+      th:data-member-email="${session.loginMember?.email}"
+      th:data-member-nickname="${session.loginMember?.nickname}"
+>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>초기화면(tymeleaf)</title>
+  <script type="module" th:inline="javascript">
+    let memberId = [[${session.loginMember?.nickname}]]
+    let member = [[${session.loginMember}]]
+    console.log(memberId,member);
+  </script>
 </head>
 <body>
   <h3 th:if="${!session.isEmpty()}">
-<p><span th:text="${session.loginOkMember.nickname}"></span><span>님 반갑습니다.</span></p>
+  <p><span th:text="${session?.loginMember.nickname}"></span><span>님 반갑습니다.</span></p>
+    <th:block th:with="x='Hello <b>Spring!</b>'">
+    <p>[[${x}]]</p>
+    <p>[(${x})]</p>
+    </th:block>
+    <p>[[Hello <b>Spring!</b>]]</p>
+    <p>[(Hello <b>Spring!</b>)]</p>
   </h3>
 <ul th:if="${session.isEmpty()}">      <!--th:if 조건에 맞으면 렌더링을함-->
   <li><a href="/login">로그인</a></li>
@@ -18,6 +33,7 @@
 </ul>
 
 <ul th:if="${!session.isEmpty()}">
+  <li><a href="/logout">로그아웃</a></li>
   <li><a href="/products">상품관리-SSR</a></li>
   <li><a href="/csr/products">상품관리-CSR</a></li>
 </ul>
