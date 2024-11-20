@@ -5,34 +5,23 @@
       ~{::title},       <!--/* title */-->
       <!--/*--------------------------*/-->
       <!--/* external */-->
-      ~{::link},        <!--/* styles */-->
-      ~{::script},              <!--/* scripts */-->
+      ~{},              <!--/* styles */-->
+      ~{},              <!--/* scripts */-->
       <!--/* internal */-->
-      ~{::style},       <!--/* style */-->
+      ~{},              <!--/* style */-->
       ~{},              <!--/* script */-->
       <!--/*--------------------------*/-->
       ~{::.topmenu},    <!--/* upm */-->
-      _,      <!--/* header */-->
-      _,         <!--/* gnb */-->
+      ~{::.head },      <!--/* header */-->
+      ~{::.gnb},         <!--/* gnb */-->
       ~{::main},        <!--/* main */-->
-      _,       <!--/* footer default*/-->
+      ~{::.foot},       <!--/* footer default*/-->
       )}">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>로그인</title>
-  <link rel="stylesheet" th:href="@{/css/login/loginForm.css}">
-  <style>
-    input {
-      outline : 1px solid #000;
-    }
-  </style>
-  <script type="module" th:src="@{/js/login/loginForm.js}"></script>
-  <script>
-
-    console.log('internal javascript 수행됨');
-  </script>
+  <title>초기 페이지</title>
 </head>
 <body>
 <div class="wrap">
@@ -49,13 +38,7 @@
   </div>
   <div id="content">
     <main class="main">
-      <h3>로그인</h3>
-      <form action="" method="POST" th:object="${loginForm}">
-        <div><span th:errors="*{email}"></span><span th:errors="*{passwd}"></span></div>
-        <div><label for="email">아이디</label><input type="text" th:field="*{email}"></div>
-        <div><label for="passwd">비밀번호</label><input type="password" th:field="*{passwd}"></div>
-        <div><button>회원가입</button><button>로그인</button></div>
-      </form>
+      로그인 전 초기 페이지
     </main>
   </div>
   <div id="foot">

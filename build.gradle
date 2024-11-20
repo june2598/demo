@@ -40,6 +40,10 @@ dependencies {
 	/******************************************/
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// https://mvnrepository.com/artifact/org.webjars/bootstrap
+	implementation group: 'org.webjars', name: 'bootstrap', version: '5.3.3'
+
 }
 
 

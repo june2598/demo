@@ -1,14 +1,32 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragment/layout::main(
+      ~{::title},       <!--/* title */-->
+      <!--/*--------------------------*/-->
+      <!--/* external */-->
+      ~{},              <!--/* styles */-->
+      ~{},              <!--/* scripts */-->
+      <!--/* internal */-->
+      ~{::style},              <!--/* style */-->
+      ~{},              <!--/* script */-->
+      <!--/*--------------------------*/-->
+      ~{::.topmenu},    <!--/* upm */-->
+      _,                <!--/* header */-->
+      ~{::.gnb},         <!--/* gnb */-->
+      ~{::main},        <!--/* main */-->
+      ~{::.foot},       <!--/* footer default*/-->
+      )}">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>회원가입</title>
+
   <style>
-    /* * {
-      outline: 1px solid red;
-    } */
+    input{
+      outline: 1px solid #000;
+    }
      .field-err{
       font-size: 0.7rem;
       font-weight: bold;
@@ -16,77 +34,93 @@
      }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h3 class="title">회원가입</h3>
-    <form class="join_form" method="post" action="" th:object="${joinForm}">
-      <div class="form-group">
-        <label for="email">이메일</label>
-        <input type="text" th:field="*{email}">
-        <div class="field-err" th:each="err : ${#fields.errors('email')}">
-          <span th:text="${err}"></span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="passwd">비밀번호</label>
-        <input type="password" th:field="*{passwd}">
-      </div>
-      <div class="form-group">
-        <label for="passwdChk">비밀번호확인</label>
-        <input type="password" name="passwdChk" id="passwdChk">
-      </div>
-      <div class="form-group">
-        <label for="tel">전화번호</label>
-        <input type="tel" th:field="*{tel}">
-      </div>
-      <div class="form-group">
-        <label for="nickname">별칭</label>
-        <input type="text" th:field="*{nickname}">
-      </div>
-      <div class="form-group-gender">
-        <div>
-          <span>성별</span>
-        </div>
-        <div>
-          <!-- joinForm.gender 값이 없으면 value='남자'
-               joinForm.gender 값이 '남자' value='남자' checked-->
-          <!-- joinForm.gender 값이 없으면 value='여자'
-               joinForm.gender 값이 '여자' value='여자' checked-->
-          <input type="radio" value="남자" th:field="*{gender}">
-          <label th:for="${#ids.prev('gender')}">남자</label>
-          <input type="radio" value="여자" th:field="*{gender}">
-          <label th:for="${#ids.prev('gender')}">여자</label>
-        </div>
-      </div>
-      <div class="form-group-hobby">
-        <div>
-          <label for="hobby">취미</label>
-        </div>
-        <div>
-          <th:block th:each="ele : ${codes}">
-            <input type="checkbox" th:value="${ele.codeId}" th:field="*{hobby}">
-            <label th:for="${#ids.prev('hobby')}" th:text="${ele.decode}"></label>   <!-- #ids.prev : Thymeleaf 내장함수: 필드의 아이디값에 맞춰서 자동매칭을 해줌(hobby1,2,3 ...). 다음에오면 next 앞에오면 prev-->
-          </th:block>
-        </div>
-      </div>
-      <div class="form-group-region">
-        <label for="region">지역</label>
-        <select th:field="*{region}">
-          <option value="" selected>== 선택 ==</option>
-          <th:block th:each="ele : ${regions}">
-            <option th:value="${ele.codeId}" th:text="${ele.decode}">서울</option>
-          </th:block>
-
-        </select>
-      </div>
-      <div class="button">
-        <button type="submit">가입</button><button>취소</button>
-      </div>
+<div class="wrap">
+  <div id="tl"></div>
+  <div id="tc">
+    <div class="topmenu" th:insert="~{fragment/top::beforeLoginTop}"/>
   </div>
-  </form>
-  <script>
-  </script>
-</body>
+  <div id="tr"></div>
+  <div id="banner">
+    <header class="head" th:insert="~{fragment/banner::global}"/>
+  </div>
+  <div id="gnb">
+    <nav class="gnb" th:insert="~{fragment/menu::global}"/>
+  </div>
+  <div id="content">
+    <main class="main">
+      <div class="container">
+        <h3 class="title">회원가입</h3>
+        <form class="join_form" method="post" action="" th:object="${joinForm}">
+          <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="text" th:field="*{email}">
+            <div class="field-err" th:each="err : ${#fields.errors('email')}">
+              <span th:text="${err}"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="passwd">비밀번호</label>
+            <input type="password" th:field="*{passwd}">
+          </div>
+          <div class="form-group">
+            <label for="passwdChk">비밀번호확인</label>
+            <input type="password" name="passwdChk" id="passwdChk">
+          </div>
+          <div class="form-group">
+            <label for="tel">전화번호</label>
+            <input type="tel" th:field="*{tel}">
+          </div>
+          <div class="form-group">
+            <label for="nickname">별칭</label>
+            <input type="text" th:field="*{nickname}">
+          </div>
+          <div class="form-group-gender">
+            <div>
+              <span>성별</span>
+            </div>
+            <div>
+              <!-- joinForm.gender 값이 없으면 value='남자'
+                   joinForm.gender 값이 '남자' value='남자' checked-->
+              <!-- joinForm.gender 값이 없으면 value='여자'
+                   joinForm.gender 값이 '여자' value='여자' checked-->
+              <input type="radio" value="남자" th:field="*{gender}">
+              <label th:for="${#ids.prev('gender')}">남자</label>
+              <input type="radio" value="여자" th:field="*{gender}">
+              <label th:for="${#ids.prev('gender')}">여자</label>
+            </div>
+          </div>
+          <div class="form-group-hobby">
+            <div>
+              <label for="hobby">취미</label>
+            </div>
+            <div>
+              <th:block th:each="ele : ${codes}">
+                <input type="checkbox" th:value="${ele.codeId}" th:field="*{hobby}">
+                <label th:for="${#ids.prev('hobby')}" th:text="${ele.decode}"></label>   <!-- #ids.prev : Thymeleaf 내장함수: 필드의 아이디값에 맞춰서 자동매칭을 해줌(hobby1,2,3 ...). 다음에오면 next 앞에오면 prev-->
+              </th:block>
+            </div>
+          </div>
+          <div class="form-group-region">
+            <label for="region">지역</label>
+            <select th:field="*{region}">
+              <option value="" selected>== 선택 ==</option>
+              <th:block th:each="ele : ${regions}">
+                <option th:value="${ele.codeId}" th:text="${ele.decode}">서울</option>
+              </th:block>
 
+            </select>
+          </div>
+          <div class="button">
+            <button type="submit">가입</button><button>취소</button>
+          </div>
+      </form>
+      </div>
+    </main>
+  </div>
+  <div id="foot">
+    <footer class="foot" th:insert="~{fragment/footer::global}"/>
+  </div>
+</div>
+</body>
 </html>
