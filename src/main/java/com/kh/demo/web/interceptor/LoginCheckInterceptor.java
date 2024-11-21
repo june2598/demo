@@ -44,7 +44,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     HttpSession session = request.getSession(false);
 
     //세션이 없거나, loginOkMember 정보가 없으면 로그엔페이지로 리다이렉트
-    if(session == null || session.getAttribute("loginOkMember") == null) {
+    if(session == null || session.getAttribute("loginMember") == null) {
 //      log.info("미인증 요청");
 
       //requestparam으로 ?뒤에 url을 읽어올수있다
