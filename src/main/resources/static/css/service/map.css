@@ -1,0 +1,93 @@
+@charset "utf=8";
+
+body {
+  margin: 0;
+  padding: 0;
+}
+#content .main .map-wrap {
+  position: relative;
+}
+
+#search {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  padding: 7px;
+  background-color: #fff;
+  border: 1px solid #000;
+  width: 270px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+#search button {
+  font: inherit;
+}
+#whereAmI {
+  font-size: 0.8rem;
+  border-radius: 5%;
+  background-color: yellow;
+}
+
+#content .main .map-wrap .search_result {
+  position: absolute;
+  top:100px;
+  left:50px;
+  z-index: 9999;
+  background-color: #fff8;
+  border: 1px solid #000;
+}
+
+#content .main .map-wrap .myMarker {
+  width: 20px;
+  height: 20px;
+  background-color: rgba(255, 0, 0, 0.3);
+  border-radius: 50%;
+  position: relative;
+}
+
+#content .main .map-wrap .myMarker::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 0, 0, 0.3);
+  border-radius: 50%;
+  /* animation: ripple 2s infinite ease-out; */
+  animation-name: ripple;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-out;  /* 애니메이션 속도 변화를 정의 */
+  /* ease 시작은 느리고 중간은 빠르며 끝은 느림*/
+  /* linear 일정한 속도로 진행 */
+  /* ease-in 시작은 느리고 끝은 빠름 */
+  /* ease-out 시작은 빠르고 끝은 느림*/
+  /* ease-in-out 시작과 끝은 느리고 중간은 빠름*/
+  top: 0;
+  left: 0;
+}
+
+#content .main .map-wrap .myMarker::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 0, 0, 0.3);
+  border-radius: 50%;
+  animation: ripple 2s infinite ease-out;
+  animation-delay: 0.5s;
+  top: 0;
+  left: 0;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}

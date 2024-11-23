@@ -5,14 +5,14 @@
       ~{::title},       <!--/* title */-->
       <!--/*--------------------------*/-->
       <!--/* external */-->
-      ~{},              <!--/* styles */-->
-      ~{},              <!--/* scripts */-->
+      ~{::link},              <!--/* styles */-->
+      ~{::script},              <!--/* scripts */-->
       <!--/* internal */-->
       ~{},              <!--/* style */-->
       ~{},              <!--/* script */-->
       <!--/*--------------------------*/-->
       ~{::.topmenu},    <!--/* upm */-->
-      ~{::.head },      <!--/* header */-->
+      ~{},      <!--/* header */-->
       ~{::.gnb},         <!--/* gnb */-->
       ~{::main},        <!--/* main */-->
       ~{::.foot},       <!--/* footer default*/-->
@@ -22,12 +22,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>위치 검색</title>
+  <script type="text/javascript"
+          src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=uhq6cts1yx&callback=main"></script>
+  <script type="text/javascript"
+          src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=0d19dafd2380499ec9c17a01cf58170b&libraries=services,clusterer,drawing"></script>
+  <link rel="stylesheet" href="/css/service/map.css">
+  <script defer src="/js/service/map.js"></script>
 </head>
 <body>
 <div class="wrap">
   <div id="tl"></div>
   <div id="tc">
-    <div class="topmenu" th:insert="~{fragment/top::afterLoginTop}"/>
+    <div class="topmenu" th:insert="~{fragment/top::beforeLoginTop}"/>
   </div>
   <div id="tr"></div>
   <div id="banner">
@@ -38,10 +44,14 @@
   </div>
   <div id="content">
     <main class="main">
-      <div class="wrap">
-        <div id="map" style="width:100vw; height:100vh;"></div>
+      <div class="map-wrap">
+        <div id="map" style="width: 100%; height: 600px"></div>
         <div id="search">
-          <label for="">검색어</label><input id="keyword" type="text"><button id="searchBtn">검색</button>
+          <label for="">검색어</label><input id="keyword" type="text" /><button
+            id="searchBtn"
+        >
+          검색
+        </button>
         </div>
       </div>
     </main>
@@ -50,5 +60,6 @@
     <footer class="foot" th:insert="~{fragment/footer::global}"/>
   </div>
 </div>
+
 </body>
 </html>

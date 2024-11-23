@@ -33,7 +33,9 @@ public class AppConfig implements WebMvcConfigurer {
                 "/img/**",
                 "/api/**",
                 "/test/**",
-                "/error/**"
+                "/error/**",
+                "/webjars/**",
+                "/services/**"
             );
 //    registry.addInterceptor(loggingInterceptor)
 //        .addPathPatterns("/**");

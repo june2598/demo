@@ -109,4 +109,21 @@
     },
   };
 
-    export { getBytesSize, ajax };
+  /*-----------------------------------------------------------------------*
+   * 자바스크립트 로딩하기
+   *-----------------------------------------------------------------------*/
+   function loadScript(url){
+
+   return new Promise((resolve,reject)=>{
+   //비동기코드
+   const scriptEle = document.createElement('script');
+   scriptEle.src = url;
+   //비동기 코드 성공시
+   scriptEle.addEventListener('load', e=>resolve(`${url} 로딩성공`));
+   //비동기 코드 실패시
+   scriptEle.addEventListener('error', e=>reject( new Error(`${url} 로딩 실패`)));
+   document.head.appendChild(scriptEle);
+   });
+}
+
+    export { getBytesSize, ajax, loadScript };
