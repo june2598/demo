@@ -10,24 +10,19 @@
 
     .fieldError { border:1px solid red; }
     .fieldSuccess { border:1px solid green; }
-
-    button.active{
-      background-color: #0f0;
-      color: #fff;
-    }
   </style>
   <script type="module">
-    import { ajax,  PaginationUI} from '/js/common.js';
+    import { ajax } from '/js/common.js';
 
     //상품등록
-    const addProduct = async product => {
+    const addProduct = async product => {         //매개값으로 상품을 받음
       try {
         const url = '/api/products';
-        const result = await ajax.post(url, product);
+        const result = await ajax.post(url, product);     
         if (result.header.rtcd === 'S00') {
           console.log(result.body);
           frm.reset();
-          getProducts();
+          getProducts();      //갱신된 목록을 가져와서 보여주는 부분
         } else {
           console.log(result.header.rtmsg);
         }
@@ -39,17 +34,20 @@
     //상품조회
     const getProduct = async pid => {
       try {
-        const url = `/api/products/${pid}`;
+        const url = `/api/products/${pid}`;    
         const result = await ajax.get(url);
         console.log(result);
         if (result.header.rtcd === 'S00') {
           console.log(result.body);
-          // productId2.value = result.body.productId;
+          // productId2.value = result.body.pname 과의 차이 : 보이는값으로 접근 , 초기값에 접근
+
+          //초기값으로 한번 세팅해주는 부분이 굳이 필요한가?
           productId2.setAttribute('value', result.body.productId);
           pname2.setAttribute('value', result.body.pname);
           quantity2.setAttribute('value', result.body.quantity);
           price2.setAttribute('value', result.body.price);
-
+          
+          //어차피 새로 할당한다?
           productId2.value = result.body.productId;
           pname2.value = result.body.pname;
           quantity2.value =  result.body.quantity;
@@ -99,14 +97,13 @@
     };
 
     //상품목록
-    const getProducts = async (reqPage,reqRec) => {
+    const getProducts = async () => {
       try {
-        const url = `/api/products?reqPage=${reqPage}&reqRec=${reqRec}`;
+        const url = `/api/products`;
         const result = await ajax.get(url);
-
+        console.log(result);
         if (result.header.rtcd === 'S00') {
           displayProductList(result.body);
-
         } else {
           console.log(result.header.rtmsg);
         }
@@ -115,7 +112,17 @@
       }
     };
 
-    //상품등록 화면
+    // //목록버튼
+    // const $listBtn = document.createElement('button'); // <button></button>
+    // $listBtn.textContent = '목록가져오기'; //<button>목록가져오기</button>
+    // $listBtn.setAttribute('id', 'btnList'); //<button id='btnList'>목록가져오기</button>
+    // document.body.appendChild($listBtn);
+    // btnList.addEventListener('click', getProducts);
+
+    const $list = document.createElement('div');
+    document.body.appendChild($list);
+
+    //상품 등록화면
     function displayForm() {
       //상품등록
       const $addFormWrap = document.createElement('div');
@@ -214,7 +221,7 @@
       };
 
       const changeReadMode = frm => {
-        frm.classList.toggle('mode-read', true);
+        frm.classList.toggle('mode-read', true);    //굳이 toggle을 써야하는가? add를 쓰는건 안되나?
         [...frm.querySelectorAll('input')]
           .filter(input => input.name !== 'productId')
           .forEach(input => input.setAttribute('readonly', ''));
@@ -279,7 +286,7 @@
 
     //상품목록 화면
     function displayProductList(products) {
-      console.log($list);
+
       const makeTr = products => {
         const $tr = products
           .map(
@@ -306,57 +313,19 @@
           </tbody>
         </table>`;
 
-      const $products = $list.querySelectorAll('table tbody tr');
+      const $products = $list.querySelectorAll('table tbody tr');   // 테이블의 tbody 내 모든 tr 요소(각 상품 행)를 선택. 이 메서드는 NodeList를 반환하며, 각 행에 대한 참조를 포함
 
-      // Array.from($products)
-      [...$products].forEach(product =>
+      [...$products].forEach(product =>         //NodeList는 배열이 아니기 때문에, 전개 연산자(...)를 사용하여 이를 배열로 변환, forEach를 사용가능케함. = Array.from($products)
         product.addEventListener('click', e => {
-          const pid = e.currentTarget.dataset.pid;
-          getProduct(pid);
+          const pid = e.currentTarget.dataset.pid;    //dataset 속성은 HTML 요소에 정의된 data-* 속성에 접근할 수 있게 해줍니다. 예를 들어, <tr data-pid="123">와 같은 형태로 데이터를 설정한 경우, dataset.pid를 통해 123 값을 가져올 수 있습니다.
+          getProduct(pid);                            //이 코드는 클릭된 상품의 고유 식별자(pid)를 가져옵니다.
         }),
       );
     }
   
-    displayReadForm(); //조회
-    displayForm();//등록
-    //getProducts();//목록
-
-    const $list = document.createElement('div');
-    $list.setAttribute('id','list')
-    document.body.appendChild($list);
-
-    const divEle = document.createElement('div');
-    divEle.setAttribute('id','reply_pagenation');
-    document.body.appendChild(divEle);
-
-    (async ()=>{
-      const url = '/api/products/totalCnt';
-      try {
-        const result = await ajax.get(url);
-        
-        const totalRecords = result.totalCnt; // 전체 레코드수
-        const recordsPerPage = 10;            // 페이지당 레코드수
-        const pagesPerPage = 10;              // 한페이지당 페이지수
-
-        const handlePageChange = (reqPage)=>{
-          return getProducts(reqPage,recordsPerPage);
-        };
-
-        // Pagination UI 초기화
-        var pagination = new PaginationUI('reply_pagenation', handlePageChange);
-        
-        pagination.setTotalRecords(totalRecords);
-        pagination.setRecordsPerPage(recordsPerPage);
-        pagination.setPagesPerPage(pagesPerPage);
-
-        // 첫페이지 가져오기
-        pagination.handleFirstClick();   
-
-      }catch(err){
-        console.error(err);
-      }
-    })();
-
+    displayReadForm();      //화면 렌더링
+    displayForm();          //화면 렌더링
+    getProducts();          //화면 렌더링
   </script>
 </head>
 <body></body>

@@ -20,23 +20,23 @@ public class AppConfig implements WebMvcConfigurer {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     //인증체크 (다수일경우 순서 중요!)
-    registry.addInterceptor(loginCheckInterceptor)
-            .order(2) //인터셉터 실행 순서 지정
-            .addPathPatterns("/**")   // 루트부터 하위경로 모두에 대해 인증체크(인터셉터에 포함)를 하겠다.
-            .excludePathPatterns(              // 예외를 두겠다.
-                "/",                  // 초기화면
-                "/login",
-                "/logout",
-                "/members/join",
-                "/css/**",
-                "/js/**",
-                "/img/**",
-                "/api/**",
-                "/test/**",
-                "/error/**",
-                "/webjars/**",
-                "/services/**"
-            );
+//    registry.addInterceptor(loginCheckInterceptor)
+//            .order(2) //인터셉터 실행 순서 지정
+//            .addPathPatterns("/**")   // 루트부터 하위경로 모두에 대해 인증체크(인터셉터에 포함)를 하겠다.
+//            .excludePathPatterns(              // 예외를 두겠다.
+//                "/",                  // 초기화면
+//                "/login",
+//                "/logout",
+//                "/members/join",
+//                "/css/**",
+//                "/js/**",
+//                "/img/**",
+//                "/api/**",
+//                "/test/**",
+//                "/error/**",
+//                "/webjars/**",
+//                "/services/**"
+//            );
 //    registry.addInterceptor(loggingInterceptor)
 //        .addPathPatterns("/**");
 

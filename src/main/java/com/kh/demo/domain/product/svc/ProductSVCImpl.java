@@ -12,7 +12,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProductSVCImpl implements ProductSVC{
+public class ProductSVCImpl implements ProductSVC {
 
   private final ProductDAO productDAO;
 
@@ -38,13 +38,21 @@ public class ProductSVCImpl implements ProductSVC{
 
   @Override
   public int updateById(Long productId, Product product) {
-    return productDAO.updateById(productId,product);
+    return productDAO.updateById(productId, product);
   }
 
   @Override
   public int deleteByIds(List<Long> productIds) {
     return productDAO.deleteByIds(productIds);
   }
+
+  @Override
+  public List<Product> findAll(int reqPage, int reqRec) {
+    return productDAO.findAll(reqPage, reqRec);
+  }
+
+  @Override
+  public int totalRec() {
+    return productDAO.totalRec();
+  }
 }
-
-

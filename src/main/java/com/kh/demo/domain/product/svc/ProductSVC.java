@@ -22,4 +22,9 @@ public interface ProductSVC {
   int updateById(Long productId, Product product);
   //다중삭제
   int deleteByIds(List<Long> productIds);
+
+  //페이지 목록
+  List<Product> findAll(int reqPage, int reqRec);
+
+  int totalRec();
 }

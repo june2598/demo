@@ -143,6 +143,19 @@ public class ProductDAOImpl implements ProductDAO {
   }
 
   @Override
+  public List<Product> findAll(int reqPage, int reqRec) {
+    StringBuffer sql = new StringBuffer();
+    sql.append(" select product_id, pname, quantity, price ");
+    sql.append(" from product ");
+    sql.append(" offset  (:reqPage-1) * :reqRec rows fetch first :reqRec rows only ");
+
+    Map<String, Integer> param = Map.of("reqPage", reqPage, "reqRec", reqRec);
+    List<Product> list = template.query(sql.toString(), param, myRowMapper);
+
+    return list;
+  }
+
+  @Override
   public Optional<Product> findById(Long productId) {
     StringBuffer sql = new StringBuffer();
     sql.append("select product_id,pname,quantity,price ");
@@ -205,5 +218,12 @@ public class ProductDAOImpl implements ProductDAO {
     int rows = template.update(sql.toString(),param);
 
     return rows;
+  }
+
+  @Override
+  public int totalRec() {
+    String sql = "select count(*) from product ";
+    return template.queryForObject(sql, Map.of(), Integer.class);
+
   }
 }
